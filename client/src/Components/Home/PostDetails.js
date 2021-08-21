@@ -46,8 +46,7 @@ const useStyles = makeStyles({
 
 const PostDetails = ({ posts }) => {
   const classes = useStyles();
-  const url =
-    posts.picture || "https://source.unsplash.com/user/erondu/1601x900";
+  const url = posts.image || "https://source.unsplash.com/user/erondu/1601x900";
   return (
     <>
       <Box className={classes.container} key={posts.i}>

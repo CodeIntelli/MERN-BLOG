@@ -59,8 +59,7 @@ const DetailView = ({ match }) => {
   const history = useHistory();
   const { search } = useLocation();
   const [post, setPost] = React.useState([]);
-  const url =
-    post.picture || "https://source.unsplash.com/user/erondu/1620x900";
+  const url = post.image || "https://source.unsplash.com/user/erondu/1620x900";
   React.useEffect(() => {
     const fetchData = async () => {
       let data = await readPostById(match.params.id);

@@ -42,9 +42,9 @@ const postController = {
           posts = await post.find({ username: username });
           // console.log(posts);
         } else if (category) {
-          console.log("call category");
+          // console.log("call category");
           posts = await post.find({ categories: category });
-          console.log(posts);
+          // console.log(posts);
         } else {
           posts = await post.find();
         }

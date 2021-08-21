@@ -9,7 +9,7 @@ import {
   IconButton,
 } from "@material-ui/core";
 import { AddCircle } from "@material-ui/icons";
-import { readPostById, updatePost } from "../../services/api";
+import { readPostById, updatePost, uploadFile } from "../../services/api";
 import { useHistory } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -22,7 +22,6 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     height: "60vh",
     objectFit: "cover",
-    backgroundImage: "url('https://source.unsplash.com/user/erondu/1600x900')",
     minHeight: "500px",
     /* Create the parallax scrolling effect */
     backgroundAttachment: "fixed",
@@ -65,12 +64,15 @@ const UpdateView = ({ match }) => {
   const classes = useStyles();
   const history = useHistory();
   const [post, setUpdatePost] = React.useState(initialValue);
+  const [file, setFile] = React.useState("");
+  const [image, setImage] = React.useState("");
+  const url = post.image || "https://source.unsplash.com/user/erondu/1601x900";
   React.useEffect(() => {
     const fetchData = async () => {
       let data = await readPostById(match.params.id);
-      console.log("defaultview", data);
+      // console.log("defaultview", data);
       setUpdatePost(data);
-      console.log(data);
+      // console.log(data);
     };
     fetchData();
   }, []);
@@ -78,19 +80,53 @@ const UpdateView = ({ match }) => {
     setUpdatePost({ ...post, [e.target.name]: e.target.value });
   };
 
+  React.useEffect(() => {
+    const getImages = async () => {
+      if (file) {
+        const data = new FormData();
+        data.append("name", file.name);
+        data.append("file", file);
+        // console.log("file data", file);
+        // console.log("data", data);
+        const images = await uploadFile(data);
+        post.image = images.data;
+        setImage(images.data);
+        setImage(post.image);
+        // handleChange(images.data);
+        // console.log(images.data);
+      }
+    };
+    getImages();
+  }, [file]);
   const updatePostClick = async () => {
     await updatePost(match.params.id, post);
     history.push(`/details/${match.params.id}`);
   };
 
-  console.log(post.title);
+  // console.log(post.title);
   return (
     <>
-      <Box className={classes.image}></Box>
+      <Box
+        className={classes.image}
+        style={{
+          backgroundImage: `url('${url}')`,
+        }}
+      ></Box>
       <Box className={classes.container}>
         <FormControl className={classes.form}>
           <IconButton>
-            <AddCircle fontSize="large" color="primary" />
+            <label htmlFor="fileInput" style={{ cursor: "pointer" }}>
+              <AddCircle fontSize="large" color="primary" />
+            </label>
+            <input
+              type="file"
+              id="fileInput"
+              style={{ display: "none" }}
+              name="image"
+              onChange={(e) => {
+                setFile(e.target.files[0]);
+              }}
+            />
           </IconButton>
           <InputBase
             placeholder="Enter your title here"

@@ -25,7 +25,6 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     height: "60vh",
     objectFit: "cover",
-    backgroundImage: "url('https://source.unsplash.com/user/erondu/1608x900')",
     minHeight: "500px",
     /* Create the parallax scrolling effect */
     backgroundAttachment: "fixed",
@@ -69,6 +68,8 @@ const CreateView = () => {
   const history = useHistory();
   const [post, setPost] = React.useState(initialValue);
   const [file, setFile] = React.useState("");
+  const [image, setImage] = React.useState("");
+  const url = post.image || "https://source.unsplash.com/user/erondu/1620x900";
   const handleChange = (e) => {
     setPost({ ...post, [e.target.name]: e.target.value });
   };
@@ -82,25 +83,38 @@ const CreateView = () => {
         const data = new FormData();
         data.append("name", file.name);
         data.append("file", file);
-        await uploadFile(data);
+        // console.log("file data", file);
+        // console.log("data", data);
+        const images = await uploadFile(data);
+        post.image = images.data;
+        setImage(images.data);
+        setImage(post.image);
+        // handleChange(images.data);
+        // console.log(images.data);
       }
     };
     getImages();
-  });
+  }, [file]);
 
   return (
     <>
-      <Box className={classes.image}></Box>
+      <Box
+        className={classes.image}
+        style={{
+          backgroundImage: `url('${url}')`,
+        }}
+      ></Box>
       <Box className={classes.container}>
         <FormControl className={classes.form}>
           <IconButton>
-            <label htmlFor="fileInput">
+            <label htmlFor="fileInput" style={{ cursor: "pointer" }}>
               <AddCircle fontSize="large" color="primary" />
             </label>
             <input
               type="file"
               id="fileInput"
               style={{ display: "none" }}
+              name="image"
               onChange={(e) => {
                 setFile(e.target.files[0]);
               }}
