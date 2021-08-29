@@ -1,4 +1,5 @@
 import post from "../model";
+
 const postController = {
   testing(req, res) {
     res.send("connected from router postcontroller");
@@ -7,7 +8,7 @@ const postController = {
     try {
       const data = await new post(req.body);
       data.save();
-      console.log("success");
+      // console.log("success");
     } catch (err) {
       res.json({ error: err });
     }

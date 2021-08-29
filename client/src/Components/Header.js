@@ -1,7 +1,8 @@
 import React from "react";
 import { AppBar, Toolbar, Typography, makeStyles } from "@material-ui/core";
 import { Link } from "react-router-dom";
-
+import { useHistory } from "react-router-dom";
+import { useOktaAuth } from "@okta/okta-react";
 const useStyles = makeStyles({
   navbar: {
     background: "#fff",
@@ -25,7 +26,42 @@ const useStyles = makeStyles({
 });
 
 const Header = () => {
+  const { oktaAuth, authState } = useOktaAuth();
+  const history = useHistory();
   const classes = useStyles();
+
+  if (authState && authState.isPending) return null;
+
+  const login = async () => history.push("/login");
+
+  const logout = async () => oktaAuth.signOut();
+  const button = authState.isAuthenticated ? (
+    <button
+      style={{
+        border: "none",
+        background: "unset",
+        textTransform: "uppercase",
+        fontSize: 17,
+        cursor: "pointer",
+      }}
+      onClick={logout}
+    >
+      <span>Logout</span>
+    </button>
+  ) : (
+    <button
+      style={{
+        border: "none",
+        background: "unset",
+        textTransform: "uppercase",
+        fontSize: 17,
+        cursor: "pointer",
+      }}
+      onClick={login}
+    >
+      <span>Login</span>
+    </button>
+  );
   return (
     <>
       <AppBar className={classes.navbar}>
@@ -49,7 +85,7 @@ const Header = () => {
             style={{ textDecoration: "none", color: "inherit" }}
             to={"/login"}
           >
-            <Typography>LOGIN</Typography>
+            <Typography>{button}</Typography>
           </Link>
         </Toolbar>
       </AppBar>

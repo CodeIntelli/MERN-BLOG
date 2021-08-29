@@ -6,6 +6,7 @@ import { Typography } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { readPostById, deletePost } from "../../services/api";
 import { useHistory, useLocation } from "react-router-dom";
+import Comments from "../../Comments/Comments";
 const useStyles = makeStyles((theme) => ({
   container: {
     padding: "0 80px",
@@ -68,11 +69,11 @@ const DetailView = ({ match }) => {
     };
     fetchData();
   }, []);
-
+  // console.log("Details View post", post);
   const deleteBlog = async function () {
     let data = await deletePost(post._id);
     history.push("/");
-    console.log("delete successfully");
+    // console.log("delete successfully");
   };
   return (
     <>
@@ -113,6 +114,7 @@ const DetailView = ({ match }) => {
           </Typography>
         </Box>
         <Typography>{post.description}</Typography>
+        <Comments post={post} />
       </Box>
     </>
   );

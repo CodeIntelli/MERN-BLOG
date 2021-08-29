@@ -54,3 +54,44 @@ export const uploadFile = async (data) => {
     console.log("error", error);
   }
 };
+
+export const newComment = (data) => {
+  try {
+    // console.log("data present", data);
+    // console.log("data send");
+    const respond = axios
+      .post(`${url}/comment/new`, data)
+      .then(() => {
+        console.log("respond return");
+      })
+      .catch((err) => {
+        console.log("data");
+      });
+
+    return respond;
+  } catch (error) {
+    console.log("error", error);
+  }
+};
+
+export const getComment = async (id) => {
+  try {
+    // console.log("present in getcomment");
+    // console.log("api id", id);
+    let respond = await axios.get(`${url}/comment/${id}`);
+    // console.log(respond.data);
+    return respond.data;
+  } catch (error) {
+    console.log("error", error);
+  }
+};
+
+export const deleteComment = async (id) => {
+  try {
+    // console.log("delete id", id);
+    let respond = await axios.delete(`${url}/comment/${id}`);
+    return respond.data;
+  } catch (error) {
+    console.log("error", error);
+  }
+};

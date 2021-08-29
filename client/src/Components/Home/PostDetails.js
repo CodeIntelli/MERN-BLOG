@@ -25,20 +25,20 @@ const useStyles = makeStyles({
     fontSize: 12,
   },
   heading: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 600,
     // lower four property will be of overflow
     overflow: "hidden",
     textOverflow: "ellipsis",
     width: "200px",
-    height: "88px",
+    // height: "88px",
     WebkitLineClamp: 3,
     WebkitBoxOrient: "vertical",
     fontFamily: "Roboto Mono",
     textAlign: "center",
   },
   details: {
-    fontSize: 12,
+    fontSize: "12px",
     color: "#000",
     margin: 2,
   },
@@ -46,17 +46,21 @@ const useStyles = makeStyles({
 
 const PostDetails = ({ posts }) => {
   const classes = useStyles();
+  const addEllipses = (str, limit) => {
+    return str.length > limit ? str.substring(0, limit) + "..." : str;
+  };
   const url = posts.image || "https://source.unsplash.com/user/erondu/1601x900";
   return (
     <>
       <Box className={classes.container} key={posts.i}>
         <img src={url} className={classes.image} alt="post-data" />
         <Typography className={classes.text}>{posts.categories}</Typography>
-        <Typography className={classes.heading}>{posts.title}</Typography>
+        <Typography className={classes.heading}>
+          {addEllipses(posts.title, 40)}
+        </Typography>
         <Typography className={classes.text}>{posts.username}</Typography>
-        <Typography className={classes.deails}>
-          {/* {() => truncateWords(sentance, 15, "...")} */}
-          {/* {posts.description} */}
+        <Typography className={classes.details}>
+          {addEllipses(posts.description, 100)}
         </Typography>
       </Box>
     </>
